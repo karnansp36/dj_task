@@ -1,0 +1,49 @@
+{% extends 'tasks/base.html' %}
+
+{% block title %}Tasks | Task Manager{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="mb-0">All Tasks</h3>
+        <a href="{% url 'task_create' %}" class="btn btn-primary">Create Task</a>
+    </div>
+    <div class="card-body">
+        {% if tasks %}
+            <div class="list-group">
+                {% for task in tasks %}
+                    <a href="{% url 'task_detail' task.id %}" class="list-group-item list-group-item-action task-priority-{{ task.priority }}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ task.title }}</h5>
+                            <small>
+                                {% if task.due_date %}
+                                    Due: {{ task.due_date|date:"M d, Y" }}
+                                {% endif %}
+                            </small>
+                        </div>
+                        <p class="mb-1">{{ task.description|truncatechars:100 }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-{{ task.status|yesno:'success,secondary,warning,danger' }}">
+                                    {{ task.get_status_display }}
+                                </span>
+                                <span class="badge bg-{{ task.priority|yesno:'info,warning,danger,danger' }}">
+                                    {{ task.get_priority_display }}
+                                </span>
+                                {% for tag in task.tags %}
+                                    <span class="badge bg-secondary">{{ tag }}</span>
+                                {% endfor %}
+                            </div>
+                            <small>Created: {{ task.created_at|date:"M d, Y" }}</small>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                No tasks found. <a href="{% url 'task_create' %}" class="alert-link">Create a new task</a> to get started.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

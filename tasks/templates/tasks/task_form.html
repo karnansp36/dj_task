@@ -1,0 +1,107 @@
+{% extends 'tasks/base.html' %}
+
+{% block title %}{{ action }} Task | Task Manager{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h3 class="mb-0">{{ action }} Task</h3>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label for="id_title" class="form-label">Title</label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <div class="text-danger">
+                        {% for error in form.title.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="mb-3">
+                <label for="id_description" class="form-label">Description</label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <div class="text-danger">
+                        {% for error in form.description.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="id_status" class="form-label">Status</label>
+                    {{ form.status }}
+                    {% if form.status.errors %}
+                        <div class="text-danger">
+                            {% for error in form.status.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <label for="id_priority" class="form-label">Priority</label>
+                    {{ form.priority }}
+                    {% if form.priority.errors %}
+                        <div class="text-danger">
+                            {% for error in form.priority.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="id_due_date" class="form-label">Due Date (optional)</label>
+                {{ form.due_date }}
+                {% if form.due_date.errors %}
+                    <div class="text-danger">
+                        {% for error in form.due_date.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="mb-3">
+                <label for="id_tags" class="form-label">Tags (comma-separated)</label>
+                {{ form.tags }}
+                {% if form.tags.errors %}
+                    <div class="text-danger">
+                        {% for error in form.tags.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="form-text">E.g., urgent, feature, bug</div>
+            </div>
+            
+            <div class="mb-3 form-check">
+                {{ form.completed }}
+                <label class="form-check-label" for="id_completed">Mark as completed</label>
+                {% if form.completed.errors %}
+                    <div class="text-danger">
+                        {% for error in form.completed.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-primary">{{ action }} Task</button>
+                <a href="{% if task %}{% url 'task_detail' task.id %}{% else %}{% url 'task_list' %}{% endif %}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
